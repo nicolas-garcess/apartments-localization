@@ -1,8 +1,9 @@
 const router = require('express').Router();
 
-const controller = require('../../controllers/apartmentscontroller.js');
-//const userVerification = require('../../middlewares/auth')
+const ApartmentController = require('../../controllers/apartmentscontroller.js');
 
-router.get('/', controller.services);
+
+router.get('/buscar', ApartmentController.search);
+router.get('/procesar', ApartmentController.process);
 
 module.exports = router;

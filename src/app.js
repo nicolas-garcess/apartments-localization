@@ -4,6 +4,9 @@ const app = express();
 require('dotenv').config();
 const PORT = process.env.PORT || 3002;
 
+require('./connectionDB');
+//require('./uploadData');
+
 //Rutas
 const routes = require('./routes');
 app.use('/', routes);
