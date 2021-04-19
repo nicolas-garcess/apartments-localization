@@ -49,7 +49,7 @@ const header = ["Latitud",
     "Apto_para_personas_movilidad_reducida",
     "Plantas",
     "Mascotas_permitidas",
-    "Balcon"]
+    "Balcon"];
 
 //Parseo de los datos del csv a un array.
 function dataMining() {
@@ -66,7 +66,7 @@ function dataMining() {
 }
 
 //Función para buscar si existen datos en la colección, de no ser así, ingresa los datos parseados del csv a la colección en mongodb
-const services = async (req, res) => {
+const upLoadData = async () => {
     try {
         //Búsqueda de todos los datos de la colección, retorna un array
         const modelServices = await ApartmentModel.find();
@@ -81,4 +81,4 @@ const services = async (req, res) => {
     }
 };
 
-services();
+upLoadData();
