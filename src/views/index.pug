@@ -1,0 +1,18 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", type="text/css" href="/css/apartments.css")
+        link(rel="stylesheet", type="text/css" href="/css/search.css")
+        link(rel="stylesheet", type="text/css" href="/css/index.css")
+        title Inico
+    body
+        div 
+            h1(class="title")= title
+        div(class="container-buttons")
+            div(class="button") 
+                a(href="/buscar-precio-habitacion" class="button__link") Por precio
+            div(class="button")
+                a(href="/buscar-locacion" class="button__link") Por ubicación

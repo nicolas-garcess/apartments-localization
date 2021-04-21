@@ -1,0 +1,19 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", type="text/css" href="/css/apartments.css")
+        link(rel="stylesheet", type="text/css" href="/css/search.css")
+        title Buscar ubicación
+    body
+        header
+            h1(class="title") Búsqueda de apartamentos por ubicación
+        main
+            div(class="container-form") 
+                form(class="form-search" action="apartamentos/procesar" method="get")
+                    input(type="number" step="0.000000001" name="latitude" placeholder="Latitud" class="form-search__input")
+                    input(type="number" step="0.000000001" name="longitude" placeholder="Longitud" class="form-search__input")
+                    input(type="number" step="0.01" name="distance" placeholder="Radio de búsqueda en km" class="form-search__input")      
+                    input(type="submit" value="Buscar" class="container-update" class="form-search__input form-search__submit") 

@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", type="text/css" href="/css/apartments.css")
+        title Resultado de búsqueda
+    body 
+        h1= message
+        main
+            if reply.length > 1
+                h2(class="results") #{reply.length} resultados
+            else if reply.length == 1
+                h2(class="results") #{reply.length} resultado
+            else
+                h2(class="results") 0 resultados
+            div
+                a(href="" class="report") Descargar reporte
+            div(class="container-apartments")
+                each apartment in reply 
+                    div(class="apartment")
+                        p(class="apartment__title")= apartment.Titulo
+                        if apartment.Habitaciones
+                            p(class="apartment__rooms") #{apartment.Habitaciones} habitaciones
+                        else 
+                            p(class="apartment__rooms") Habitaciones no especificadas
+                        p(class="apartment__price") #{apartment.Precio} €
+                        p(class="apartment__phone") Contacto: #{apartment.Telefonos}
+        
+        script.
+
+            let downloadLink = document.querySelectorAll('.report');
+            downloadLink.href = "../assets/pdf/reporte.pdf";
+            downloadLink.download = "reporte.pdf";
+            downloadLink.dispatchEvent(new MouseEvent('click'));

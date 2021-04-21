@@ -1,0 +1,96 @@
+body {
+    min-height: 100vh;
+    font-family: sans-serif;
+    background-color: beige;
+    padding: 20px;
+}
+
+h1 {
+    /* padding: 0; */
+    margin: 0 0 30px;
+    font-size: 1.5em;
+    text-align: center;   
+}
+
+main {
+    margin: 0 auto;
+}
+
+
+.container-apartments {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.apartment {
+    box-sizing: border-box;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    height: 320px;
+    width: 300px;
+    background-color: rgb(255, 255, 255);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.apartment__phone {
+    align-self: flex-start;
+}
+
+/* .table {
+    table-layout: auto;
+    text-align: center;
+    border-spacing: 0;
+    color: rgb(0, 29, 0); 
+}
+
+.table__head {
+    font-weight: bold;
+    border-bottom: green solid 1px;
+    font-size: 13px;
+}
+
+.table__data {
+    padding: 5px;
+    border-bottom: rgb(163, 207, 163) solid 1px;
+    font-size: 13px;
+}
+
+.table__data:nth-child(2), .table__data:last-child {
+    width: 100px;
+}
+
+.container-update, .container-delete {
+    width: 80px;
+    height: 20px;
+    background-color: green;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.container-delete {
+    margin-top: 5px;
+    background-color: brown;
+}
+
+.container-add {
+    width: 30%;
+    height: 30px;
+    background-color: green;
+    margin-top: 30px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 10px;
+}
+
+.container-add__link, .container-update, .container-delete {
+    text-decoration: none;
+    color: white;
+} */

@@ -11,52 +11,59 @@ const fs = require('fs');
 
 const Controller = {};
 
-const defineCriteria = (headers) => {
+const defineCriteria = (info) => {
     let response = {};
-        if (isPriceAndRooms(headers)) {
-            response = {$and: [{Precio: { $lte: headers.maxprice || 1000000, $gte: headers.minprice || 0}}, {Habitaciones: headers.rooms}]};
-        } else if (isOnlyPrice(headers)) {
-            response = {Precio: { $lte: headers.maxprice || 1000000, $gte: headers.minprice || 0}};
-        } else if (isOnlyRooms(headers)) {
-            response = {Habitaciones: headers.rooms};
+        if (isPriceAndRooms(info)) {
+            response = {$and: [{Precio: { $lte: info.maxprice || 1000000, $gte: info.minprice || 0}}, {Habitaciones: info.rooms}]};
+        } else if (isOnlyPrice(info)) {
+            response = {Precio: { $lte: info.maxprice || 1000000, $gte: info.minprice || 0}};
+        } else if (isOnlyRooms(info)) {
+            response = {Habitaciones: info.rooms};
         } 
     
     return response;
 }
 
-const isPriceAndRooms = (headers) => {
-    return ((headers.maxprice || headers.minprice) 
-            && headers.rooms);
+const isPriceAndRooms = (info) => {
+    return ((info.maxprice || info.minprice) 
+            && info.rooms);
 }
 
-const isOnlyPrice = (headers) => {
-    return (headers.maxprice || headers.minprice);
+const isOnlyPrice = (info) => {
+    return (info.maxprice || info.minprice);
 }
 
-const isOnlyRooms = (headers) => {
-    return headers.rooms ? true : false;
+const isOnlyRooms = (info) => {
+    return info.rooms ? true : false;
 }
 
 Controller.search = async (req, res) => {
     try {
-        const criteria = defineCriteria(req.headers);        
-        
+        const criteria = defineCriteria(req.query);       
+
         if (Object.keys(criteria).length !== 0) {
-            let result = await ApartmentModel.find(criteria)
+            let result = await ApartmentModel.find(criteria);
             //console.log(result);
-            res.status(200).json({
-                message: "Búsqueda exitosa",
-                quantity: result
+            res.status(200).render('result',
+            {
+                message: "Resultado de la búsqueda",
+                reply: result,
+                decision: true
             });
         } else {
-            res.status(400).json({
-                message: "No ingresó ningún campo"
+            res.status(400).render('result',
+            {
+                message: "No ingresó ningún campo",
+                reply: [],
+                decision: false
             });
         }
     } catch (error) {
-        res.status(404).json({
+        res.status(404).render('result',
+        {
             message: "Hubo un error",
-            err: error 
+            reply: [],
+            decision: false
         });
     }
 }
@@ -64,9 +71,9 @@ Controller.search = async (req, res) => {
 Controller.process = async (req, res) => {
     try {
         //Se deben convertir a radianes porque el paquete Math opera en radianes.
-        const latitude = Number(req.headers.latitude) * Math.PI/180;
-        const longitude = Number(req.headers.longitude) * Math.PI/180;
-        const distance = Number(req.headers.distance); 
+        const latitude = Number(req.query.latitude) * Math.PI/180;
+        const longitude = Number(req.query.longitude) * Math.PI/180;
+        const distance = Number(req.query.distance); 
 
         const data = await ApartmentModel.find();
 
@@ -76,7 +83,7 @@ Controller.process = async (req, res) => {
         let distanceTwoPoints = 0;
         let countApartments = 0;
         let plusPricePerSquareMeter = 0;
-
+        let apartments = [];
         for (const row of data) {
             arrivalLatitude = row.Latitud * Math.PI/180;
             arrivalLongitude = row.Longitud * Math.PI/180;
@@ -88,15 +95,16 @@ Controller.process = async (req, res) => {
             if (distanceTwoPoints <= distance) {
                 countApartments = countApartments + 1;
                 plusPricePerSquareMeter = plusPricePerSquareMeter + row.Precio_por_metro;
+                apartments.push(row);
             }
         }
 
         let meanPricePerSquareMeter = plusPricePerSquareMeter/countApartments;
 
-        res.status(200).json({
-            message: "Consulta con éxito",
+        res.status(200).render('result', {
+            message: "Resultado de la búsqueda",
             value: meanPricePerSquareMeter.toFixed(2),
-            data: data
+            reply: apartments
         });
 
     } catch (error) {
@@ -204,7 +212,6 @@ Controller.exportsFile = async (req, res) => {
             err: error 
         });
     }
-
 }
 
 module.exports = Controller;
