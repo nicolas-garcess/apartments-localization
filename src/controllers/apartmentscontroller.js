@@ -173,7 +173,7 @@ Controller.exportsFile = async (req, res) => {
                 })
                .moveDown();
             
-            for (const row of req.body.data) {
+            for (const row of JSON.parse(req.body.data)) {
                 doc.fontSize(12).font('Times-Roman')
                    .text(`Título: ${row.Titulo} \n
                           Anunciante: ${row.Anunciante} \n
@@ -190,9 +190,11 @@ Controller.exportsFile = async (req, res) => {
             }
             doc.end();
 
-            res.status(200).json({
-                message: "Archivo generado con éxito",
-            });
+            // res.status(200).json({
+            //     message: "Archivo generado con éxito",
+            //     path: `${__dirname}/../assets/pdf/reporte.pdf`
+            // });
+            res.download(`${__dirname}/../assets/pdf/reporte.pdf`);
         } else if (req.body.type === "csv") {
             const fileCSV = fs.createWriteStream(__dirname + '/../assets/csv/reporte.csv');
             csv.write(req.body.data, {headers: header})

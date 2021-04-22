@@ -15,8 +15,8 @@ html(lang="en")
                 h2(class="results") #{reply.length} resultado
             else
                 h2(class="results") 0 resultados
-            div
-                a(href="" class="report") Descargar reporte
+            div(class="container-download")
+                a(href="" class="report" data-array=reply) Descargar reporte
             div(class="container-apartments")
                 each apartment in reply 
                     div(class="apartment")
@@ -29,8 +29,31 @@ html(lang="en")
                         p(class="apartment__phone") Contacto: #{apartment.Telefonos}
         
         script.
+            const download = document.querySelector(".report")             
+            download.addEventListener('click', async (e) => {
+                e.preventDefault() //- Evita que se refresque el sitio web
+                let data = download.dataset.array;
+                try {
+                    fetch('/apartamentos/exportar', {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({type: "pdf", data: data}) 
+                    })
+                    .catch(e => alert(error))
+                    download = "../assets/pdf/reporte.pdf";
+                } catch (error) {
+                    console.log(error)
+                }
+            });
 
-            let downloadLink = document.querySelectorAll('.report');
-            downloadLink.href = "../assets/pdf/reporte.pdf";
-            downloadLink.download = "reporte.pdf";
-            downloadLink.dispatchEvent(new MouseEvent('click'));
+            //- let containerDownload = document.querySelector('.container-download');
+            //- let link = document.createElement("a");
+            
+            //- link.innerHTML = "Descargar";
+            //- //link.download = "reporte.pdf";
+            //- link.target = "_blank"
+            //- link.href = "./src/assets/pdf/reporte.pdf";
+            //- containerDownload.appendChild(link);
+            //- link.click();
