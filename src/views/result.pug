@@ -29,7 +29,7 @@ html(lang="en")
                         p(class="apartment__phone") Contacto: #{apartment.Telefonos}
         
         script.
-            const download = document.querySelector(".report")             
+            const download = document.querySelector(".report");            
             download.addEventListener('click', async (e) => {
                 e.preventDefault() //- Evita que se refresque el sitio web
                 let data = download.dataset.array;
@@ -41,8 +41,33 @@ html(lang="en")
                         },
                         body: JSON.stringify({type: "pdf", data: data}) 
                     })
-                    .catch(e => alert(error))
-                    download = "../assets/pdf/reporte.pdf";
+                    .then(async res => ({
+                            filename: 'reporte.pdf',
+                            blob: await res.blob()
+                        }))
+                    .then(resObj => {
+                        // It is necessary to create a new blob object with mime-type explicitly set for all browsers except Chrome, but it works for Chrome too.
+                        const newBlob = new Blob([resObj.blob], { type: 'application/pdf' });
+
+                        // MS Edge and IE don't allow using a blob object directly as link href, instead it is necessary to use msSaveOrOpenBlob
+                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                            window.navigator.msSaveOrOpenBlob(newBlob);
+                        } else {
+                            // For other browsers: create a link pointing to the ObjectURL containing the blob.
+                            const objUrl = window.URL.createObjectURL(newBlob);
+
+                            let link = document.createElement('a');
+                            link.href = objUrl;
+                            link.download = resObj.filename;
+                            link.click();
+
+                            // For Firefox it is necessary to delay revoking the ObjectURL.
+                            setTimeout(() => { window.URL.revokeObjectURL(objUrl); }, 250);
+                        }
+                    })
+                    .catch((error) => {
+                        console.log('DOWNLOAD ERROR', error);
+                    });                               
                 } catch (error) {
                     console.log(error)
                 }

@@ -1,23 +1,20 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const path = require('path');
 
 require('dotenv').config();
 const PORT = process.env.PORT || 3002;
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
- 
-// parse application/json
-app.use(bodyParser.json())
+
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
 
 require('./connectionDB');
 //require('./uploadData');
 
 //Asigna el motor de plantillas
 app.set('view engine','pug');
-app.set('views',path.join(__dirname,'views'))
+app.set('views',path.join(__dirname,'views'));
 
 //Archivos estáticos
 //Nos lleva a la carpeta public que contiene tanto html y estilos.

@@ -163,8 +163,9 @@ const header = [undefined,
 
 Controller.exportsFile = async (req, res) => {
     try {
+        
         if (req.body.type === "pdf") {
-            doc.pipe(fs.createWriteStream(__dirname + '/../assets/pdf/reporte.pdf'));
+            doc.pipe(fs.createWriteStream('reporte.pdf'));
             doc.fontSize(16)
                .font('Times-Bold')
                .text("Resultado de la búsqueda de apartamentos", {
@@ -190,11 +191,12 @@ Controller.exportsFile = async (req, res) => {
             }
             doc.end();
 
-            // res.status(200).json({
-            //     message: "Archivo generado con éxito",
-            //     path: `${__dirname}/../assets/pdf/reporte.pdf`
-            // });
-            res.download(`${__dirname}/../assets/pdf/reporte.pdf`);
+            res.set({
+                'Content-Disposition': 'attachment; filename=reporte.pdf',
+                'Content-Type': 'application/pdf'
+            });
+
+            fs.createReadStream(`${__dirname}/../../reporte.pdf`).pipe(res);
         } else if (req.body.type === "csv") {
             const fileCSV = fs.createWriteStream(__dirname + '/../assets/csv/reporte.csv');
             csv.write(req.body.data, {headers: header})
@@ -209,10 +211,11 @@ Controller.exportsFile = async (req, res) => {
             });
         }
     } catch (error) {
-        res.status(404).json({
-            message: "Hubo un error",
-            err: error 
-        });
+        // res.status(404).json({
+        //     message: "Hubo un error",
+        //     err: error 
+        // });
+        console.log(error);
     }
 }
 
