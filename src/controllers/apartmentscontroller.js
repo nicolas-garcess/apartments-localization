@@ -2,7 +2,6 @@ const ApartmentModel = require('../models/apartments.model');
 
 //Importación del paquete de generación de pdf
 const PDFDocument = require('pdfkit');
-const doc = new PDFDocument();
 
 //Importación del paquete csv
 const csv = require('fast-csv');
@@ -164,7 +163,7 @@ const header = [undefined,
 Controller.exportsFile = async (req, res) => {
     try {
         if (req.body.type === "pdf") {
-            //doc.pipe(fs.createWriteStream('reporte.pdf'));
+            const doc = new PDFDocument();
             doc.fontSize(16)
                .font('Times-Bold')
                .text("Resultado de la búsqueda de apartamentos", {
@@ -194,27 +193,26 @@ Controller.exportsFile = async (req, res) => {
                 'Access-Control-Allow-Origin': '*'
             });
             doc.pipe(res);
-            //fs.createReadStream(`${__dirname}/../../reporte.pdf`).pipe(res);
             doc.end();
         } else if (req.body.type === "csv") {
-            const fileCSV = fs.createWriteStream(__dirname + '/../assets/csv/reporte.csv');
-            csv.write(req.body.data, {headers: header})
-               .pipe(fileCSV);
-            
-            res.status(200).json({
-                message: "Archivo generado con éxito",
+            res.set({
+                'Content-Disposition': 'attachment; filename=reporte.csv',
+                'Content-Type': 'application/csv',
+                'Access-Control-Allow-Origin': '*'
             });
+            csv.write(JSON.parse(req.body.data), {headers: header})
+               .pipe(res);
+            
         } else {
             res.status(400).json({
                 message: "No ingresó un campo correctamente"
             });
         }
     } catch (error) {
-        // res.status(404).json({
-        //     message: "Hubo un error",
-        //     err: error 
-        // });
-        console.log(error);
+        res.status(404).json({
+            message: "Hubo un error",
+            err: error 
+        });
     }
 }
 
