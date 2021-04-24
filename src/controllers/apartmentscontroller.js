@@ -163,9 +163,8 @@ const header = [undefined,
 
 Controller.exportsFile = async (req, res) => {
     try {
-        
         if (req.body.type === "pdf") {
-            doc.pipe(fs.createWriteStream('reporte.pdf'));
+            //doc.pipe(fs.createWriteStream('reporte.pdf'));
             doc.fontSize(16)
                .font('Times-Bold')
                .text("Resultado de la búsqueda de apartamentos", {
@@ -189,14 +188,14 @@ Controller.exportsFile = async (req, res) => {
                         })
                     .addPage();
             }
-            doc.end();
-
             res.set({
                 'Content-Disposition': 'attachment; filename=reporte.pdf',
-                'Content-Type': 'application/pdf'
+                'Content-Type': 'application/pdf',
+                'Access-Control-Allow-Origin': '*'
             });
-
-            fs.createReadStream(`${__dirname}/../../reporte.pdf`).pipe(res);
+            doc.pipe(res);
+            //fs.createReadStream(`${__dirname}/../../reporte.pdf`).pipe(res);
+            doc.end();
         } else if (req.body.type === "csv") {
             const fileCSV = fs.createWriteStream(__dirname + '/../assets/csv/reporte.csv');
             csv.write(req.body.data, {headers: header})
