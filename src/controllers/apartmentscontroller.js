@@ -6,8 +6,6 @@ const PDFDocument = require('pdfkit');
 //Importación del paquete csv
 const csv = require('fast-csv');
 
-const fs = require('fs');
-
 const Controller = {};
 
 const defineCriteria = (info) => {

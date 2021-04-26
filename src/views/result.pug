@@ -4,26 +4,30 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", type="text/css" href="/css/styles.css")
         link(rel="stylesheet", type="text/css" href="/css/apartments.css")
         title Resultado de búsqueda
-    body 
-        h1= message
+    body
+        header  
+            h1= message
         main
-            if reply.length > 1
-                h2(class="results") #{reply.length} resultados
-            else if reply.length == 1
-                h2(class="results") #{reply.length} resultado
-            else
-                h2(class="results") 0 resultados
-            div(class="container-download")
-                form()
-                    p Selecciona un tipo de archivo para descargar el reporte
-                    input(type="radio" name="file" class="csv-radio")
-                    label CSV
-                    input(type="radio" name="file" class="pdf-radio")
-                    label PDF
-                    input(type="button" value="Descargar" class="report" data-array=reply)
-                //-a(href="" class="report" data-array=reply) Descargar reporte
+            div(class="main-up")
+                div(class="results-quantity")
+                    if reply.length > 1
+                        h2(class="results-quantity__title") #{reply.length} resultados
+                    else if reply.length == 1
+                        h2(class="results-quantity__title") #{reply.length} resultado
+                    else
+                        h2(class="results-quantity__title") 0 resultados
+                if reply.length != 0 
+                    div(class="container-download")
+                        form()
+                            p Selecciona un tipo de archivo para generar el reporte
+                            input(type="radio" name="file" class="csv-radio")
+                            label CSV
+                            input(type="radio" name="file" class="pdf-radio")
+                            label PDF
+                            input(type="button" value="Descargar" class="button-report send" data-array=reply)
             div(class="container-apartments")
                 each apartment in reply 
                     div(class="apartment")
@@ -34,9 +38,12 @@ html(lang="en")
                             p(class="apartment__rooms") Habitaciones no especificadas
                         p(class="apartment__price") #{apartment.Precio} €
                         p(class="apartment__phone") Contacto: #{apartment.Telefonos}
+
+            div(class="button")
+                a(href="/" class="button__link") Regresar
         
         script.
-            const download = document.querySelector(".report");            
+            const download = document.querySelector(".button-report");            
             download.addEventListener('click', async (e) => {
                 e.preventDefault() //- Evita que se refresque el sitio web
                 const csv = document.querySelector('.csv-radio').checked;
@@ -90,17 +97,6 @@ html(lang="en")
                         console.log('DOWNLOAD ERROR', error);
                     });
                 } else {
-                    alert("Escoja un valor correcto de archivo");
-                }
-                                               
+                    alert("Escoja un tipo de archivo correcto");
+                }                         
             });
-
-            //- let containerDownload = document.querySelector('.container-download');
-            //- let link = document.createElement("a");
-            
-            //- link.innerHTML = "Descargar";
-            //- //link.download = "reporte.pdf";
-            //- link.target = "_blank"
-            //- link.href = "./src/assets/pdf/reporte.pdf";
-            //- containerDownload.appendChild(link);
-            //- link.click();

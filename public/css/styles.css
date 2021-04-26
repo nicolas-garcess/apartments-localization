@@ -1,26 +1,41 @@
 body {
-    background-color: darkolivegreen;
-    min-height: 100vh;
-    color: wheat;
     font-family: sans-serif;
+    background-color: beige;
+    min-height: 100vh;
+    padding: 20px;
+    margin: 0;
+}
+
+h1 {
+    font-size: 40px;
+    text-align: center;
+    margin: 0 0 30px;  
+}
+
+main {
+    margin: 0 auto;
+}
+
+.button {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    background-color: blueviolet;
 }
 
-h1{
-    margin: 0;
-    font-size: 5em;
+.button__link {
+    display: block;
+    text-decoration: none;
+    color: white;
 }
 
-p {
-    margin: 0;
-    font-size: 4em;
-}
-
-a {
-    color: wheat;
-    font-size: 2em;
+.send {
+    color: white;
+    background-color: blueviolet;
+    text-decoration: none;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
 }
