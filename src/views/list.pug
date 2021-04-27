@@ -1,0 +1,28 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet", type="text/css" href="/css/styles.css")
+        link(rel="stylesheet", type="text/css" href="/css/apartments.css")
+        title Lista de apartamentos
+    body
+        header  
+            h1= message
+        main
+            div(class="container-apartments")
+                each apartment in reply 
+                    div(class="apartment")
+                        p(class="apartment__id") ID: #{apartment.ID}
+                        p(class="apartment__phone") Anunciante: #{apartment.Anunciante}
+                        p(class="apartment__title")= apartment.Titulo
+                        if apartment.Habitaciones
+                            p(class="apartment__rooms") #{apartment.Habitaciones} habitaciones
+                        else 
+                            p(class="apartment__rooms") Habitaciones no especificadas
+                        p(class="apartment__price") #{apartment.Precio} €
+                        div
+                            form(class="form-update" method="post" action="/apartamentos/auth/actualizar")
+                                input(type="hidden" name="data" value=apartment) 
+                                input(type="submit" value="Editar" class="form-update__submit send")    

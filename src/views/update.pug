@@ -1,0 +1,50 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Actualización de apartamento
+    body
+        h1= message
+        form(id="form-edit")
+            each value, key in reply
+                if key !== "_id" && key !== "__v"
+                    if key === "Descripcion"
+                        div
+                            label= key
+                            textarea(name=key rows="10" cols="100" class="input" required)= value
+                    else
+                        div
+                            label= key
+                            input(type="text" value=value name=key class="input" required)
+                else
+                    input(type="hidden" name=key value=value class="input") 
+            div
+                input(type="submit")
+
+        a(href="apartamentos/auth/lista") Regresar a lista de apartamentos
+
+        script.
+            const formu = document.getElementById("form-edit")             
+            formu.addEventListener('submit', async (e) => {
+                e.preventDefault() //- Evita que se refresque el sitio web
+                const nodeData = document.querySelectorAll('.input');
+                const info = {};
+                nodeData.forEach(row => {
+                    info[row.name] = row.value
+                });                
+                fetch('/apartamentos/auth/actualizar', {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({id: info["_id"], info}) 
+                })
+                    .then(r => r.json())
+                    .then(data => alert(data.message))
+                    .catch(() => alert('Modificación no se pudo realizar'))
+            }); 
+         
+        
+            

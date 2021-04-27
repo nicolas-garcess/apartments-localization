@@ -19,20 +19,20 @@ const defineCriteria = (info) => {
         } 
     
     return response;
-}
+};
 
 const isPriceAndRooms = (info) => {
     return ((info.maxprice || info.minprice) 
             && info.rooms);
-}
+};
 
 const isOnlyPrice = (info) => {
     return (info.maxprice || info.minprice);
-}
+};
 
 const isOnlyRooms = (info) => {
     return info.rooms ? true : false;
-}
+};
 
 Controller.search = async (req, res) => {
     try {
@@ -40,7 +40,7 @@ Controller.search = async (req, res) => {
 
         if (Object.keys(criteria).length !== 0) {
             let result = await ApartmentModel.find(criteria);
-            //console.log(result);
+            //console.log(JSON.stringify(result[0]));
             res.status(200).render('result',
             {
                 message: "Resultado de la búsqueda",
@@ -63,7 +63,7 @@ Controller.search = async (req, res) => {
             decision: false
         });
     }
-}
+};
 
 Controller.process = async (req, res) => {
     try {
@@ -91,7 +91,7 @@ Controller.process = async (req, res) => {
 
             if (distanceTwoPoints <= distance) {
                 countApartments = countApartments + 1;
-                plusPricePerSquareMeter = plusPricePerSquareMeter + row.Precio_por_metro;
+                plusPricePerSquareMeter = plusPricePerSquareMeter + row.Precio_por_metro_cuadrado;
                 apartments.push(row);
             }
         }
@@ -110,7 +110,7 @@ Controller.process = async (req, res) => {
             err: error 
         });
     }
-}
+};
 
 const header = [undefined,
     "Latitud",
@@ -123,7 +123,7 @@ const header = [undefined,
     "Telefonos",
     "Tipo",
     "Precio",
-    "Precio_por_metro",
+    "Precio_por_metro_cuadrado",
     "Direccion",
     "Provincia",
     "Ciudad",
@@ -133,7 +133,7 @@ const header = [undefined,
     "Parking",
     "Segunda_mano",
     "Armarios_empotrados",
-    "Lugar_construccion",
+    "Momento_construccion",
     "Amueblado",
     "Calefaccion_individual",
     "Certificacion_energetica",
@@ -212,6 +212,62 @@ Controller.exportsFile = async (req, res) => {
             err: error 
         });
     }
-}
+};
+
+Controller.update = async (req, res) => {
+    const id = req.body.id
+    try {
+        console.log(req.body)
+        ApartmentModel.findByIdAndUpdate(id, req.body.info, {useFindAndModify: false}) //Actualiza datos en la base de datos
+            .then(() => {
+                res.status(201).json({
+                    message: "Apartamento actualizado"
+                });
+            })
+            .catch((e) => {
+                res.status(400).json({
+                    message: "Ingresó datos erróneos",
+                    error: e
+                });
+            })
+    } catch (error) {
+        res.status(404).json({
+            message: "Hubo un error",
+            err: error,
+        });
+    }
+};
+
+Controller.list = async (req, res) => {
+    try {
+        const result = await ApartmentModel.find();
+        res.status(200).render('list', {
+            reply: result,
+            message: "Lista de apartamentos",
+        });
+    } catch (error) {
+        res.status(404).json({
+            message: "Hubo un error",
+            err: error,
+        });
+    }
+};
+
+Controller.find = async (req, res) => {
+    try {
+        const apartment = JSON.parse(req.body.data);
+        res.status(200).render('update', {
+            reply: apartment,
+            message: "Actualizar apartamento",
+        });
+    } catch (error) {
+        res.status(404).render('404',
+        {
+            title:"404",
+            subtitle: "NOT FOUND",
+            link: "Go home"
+        });
+    }
+};
 
 module.exports = Controller;

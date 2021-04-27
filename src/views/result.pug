@@ -1,5 +1,5 @@
 doctype html
-html(lang="en")
+html(lang="es")
     head
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
@@ -28,6 +28,9 @@ html(lang="en")
                             input(type="radio" name="file" class="pdf-radio")
                             label PDF
                             input(type="button" value="Descargar" class="button-report send" data-array=reply)
+            if value
+                div(class="container-value results-quantity")
+                    p(class="container-value__mean") El promedio del precio por metro cuadrado de los apartammentos de la zona es: #{value} €
             div(class="container-apartments")
                 each apartment in reply 
                     div(class="apartment")

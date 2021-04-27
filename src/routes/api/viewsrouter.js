@@ -7,5 +7,4 @@ router.get('/', ViewController.index);
 router.get('/buscar-precio-habitacion', ViewController.search);
 router.get('/buscar-locacion', ViewController.location);
 
-
 module.exports = router;

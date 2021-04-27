@@ -6,4 +6,9 @@ const uri = `mongodb+srv://${process.env.USER_MONGO}:${process.env.PASSWORD_MONG
 //Comando que permite la conexión
 mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => console.log("Conexión exitosa a la base de datos"))
-.catch(() => console.log("No se pudo conectar a la base de datos"))
+.catch(() => {
+    res.status(500).json(
+    {
+        title:"No se pudo conectar a la base de datos",
+    });
+})
